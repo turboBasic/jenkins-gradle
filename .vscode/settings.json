@@ -3,5 +3,6 @@
         "activityBar.background": "#053511",
         "titleBar.activeBackground": "#074B18",
         "titleBar.activeForeground": "#EFFEF3"
-    }
+    },
+    "java.dependency.packagePresentation": "hierarchical"
 }

@@ -1,0 +1,28 @@
+[
+    {
+        "type": "Group",
+        "name": "sources",
+        "parent_id": null,
+        "workspaceRoot": null,
+        "workspacePath": null,
+        "id": "TihPX6j5WnH1sYK8",
+        "iconColor": "rgb(0, 255, 0)"
+    },
+    {
+        "type": "Directory",
+        "name": "./jenkins-gradle/src",
+        "parent_id": "TihPX6j5WnH1sYK8",
+        "workspaceRoot": "./jenkins-gradle",
+        "workspacePath": "src",
+        "id": "panHWPlXj9vdFzJg"
+    },
+    {
+        "type": "Group",
+        "name": "tests",
+        "parent_id": null,
+        "workspaceRoot": null,
+        "workspacePath": null,
+        "id": "IgeQdyY0joAuHa31",
+        "iconColor": "rgb(0, 128, 0)"
+    }
+]
