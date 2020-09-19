@@ -4,6 +4,8 @@ plugins {
 }
 
 repositories {
+    jcenter()
+    maven { url 'https://repo.jenkins-ci.org/releases/' }
 }
 
 sourceSets {
@@ -29,22 +31,23 @@ dependencies {
     // Spock 1.3
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
     // allows mocking of classes (in addition to interfaces)
-    testRuntime 'net.bytebuddy:byte-buddy:1.9.12'
+    testRuntimeOnly 'net.bytebuddy:byte-buddy:1.9.12'
     // allows mocking of classes without default constructor (together with CGLIB)
-    testRuntime 'org.objenesis:objenesis:3.0.1'
+    testRuntimeOnly 'org.objenesis:objenesis:3.0.1'
 
     // JUnit 4 + Vintage Engine 5
-    testCompile 'junit:junit'
-    testRuntime 'org.junit.vintage:junit-vintage-engine:5.4.1'
+    testImplementation 'junit:junit'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.4.1'
 
     // And finally Jenkins Pipeline Unit testing framework
-    testCompile 'com.lesfurets:jenkins-pipeline-unit:1.1'
+    testImplementation 'com.lesfurets:jenkins-pipeline-unit:1.1'
 }
 
 jobDsl {
     sourceDir 'src/jobs'
     resourceDir 'src/configs'
     version = "${jobDslVersion}"
+    addRepositories = false
 }
 
 test {
