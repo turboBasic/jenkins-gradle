@@ -12,3 +12,4 @@ gen/
 .class
 .classpath
 .project
+.settings
