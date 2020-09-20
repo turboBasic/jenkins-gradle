@@ -1,6 +1,7 @@
 import testSupport.PipelineSpockTestBase
 import moduleArtifact
 import moduleNotification
+import moduleUtils
 
 class defaultPipelineTest extends PipelineSpockTestBase {
 
@@ -8,6 +9,7 @@ class defaultPipelineTest extends PipelineSpockTestBase {
     def mavenMock
     def artifactMock
     def notificationMock
+    def utilsMock
 
     def registerMocks() {
         mavenMock = Mock(Closure)
@@ -18,6 +20,9 @@ class defaultPipelineTest extends PipelineSpockTestBase {
 
         notificationMock = Mock(moduleNotification)
         binding.setVariable('moduleNotification', notificationMock)
+
+        utilsMock = Mock(moduleUtils)
+        binding.setVariable('moduleUtils', utilsMock)
     }
 
     def registerPluginMethods() {
@@ -44,6 +49,7 @@ class defaultPipelineTest extends PipelineSpockTestBase {
         1 * mavenMock.call('clean verify')
         1 * artifactMock.publish()
         1 * notificationMock.sendEmail(_)
+        2 * utilsMock.parseJsonString(_)
         assertJobStatusSuccess()
     }
 }

@@ -6,7 +6,8 @@ import spock.lang.Specification
 /**
  * A base class for Spock testing using the pipeline helper
  */
-class PipelineSpockTestBase extends Specification  implements RegressionTest {
+class PipelineSpockTestBase extends    Specification
+                            implements RegressionTest {
 
     /**
      * Delegate to the test helper

@@ -1,6 +1,5 @@
-import groovy.json.JsonSlurperClassic
 
-Map parseJSONString(String json) {
-    def jsonSlurper = new JsonSlurperClassic()
-    return jsonSlurper.parseText(json) as Map
+Map parseJsonString(String json) {
+    new groovy.json.JsonSlurperClassic()
+        .parseText(json)
 }

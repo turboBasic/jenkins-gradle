@@ -22,6 +22,7 @@ def call(Map pipelineParams) {
                     script {
                         echo "This is where we publish to Nexus"
                         moduleArtifact.publish()
+                        moduleUtils.parseJsonString('{ "aaa": 353453453454354 }')
                     }
                 }
             }
@@ -30,6 +31,7 @@ def call(Map pipelineParams) {
             always {
                 script {
                     moduleNotification.sendEmail(currentBuild.result)
+                    echo moduleUtils.parseJsonString('{ "aaa": 353453453454354, "zzz": [{"id": "444"}, {"id": "555"}] }')
                 }
             }
         }
