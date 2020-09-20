@@ -1,10 +1,34 @@
 import testSupport.PipelineSpockTestBase
+import moduleArtifact
+import moduleNotification
 
 class defaultPipelineTest extends PipelineSpockTestBase {
 
     def script
+    def mavenMock
+    def artifactMock
+    def notificationMock
+
+    def registerMocks() {
+        mavenMock = Mock(Closure)
+        helper.registerAllowedMethod('moduleMaven', [String.class], mavenMock)
+
+        artifactMock = Mock(moduleArtifact)
+        binding.setVariable('moduleArtifact', artifactMock)
+
+        notificationMock = Mock(moduleNotification)
+        binding.setVariable('moduleNotification', notificationMock)
+    }
+
+    def registerPluginMethods() {
+        // Junit
+        // https://plugins.jenkins.io/junit
+        helper.registerAllowedMethod('junit', [HashMap.class], null)
+    }
 
     def setup() {
+        registerMocks()
+        registerPluginMethods()
         script = loadScript('vars/defaultPipeline.groovy')
     }
 
@@ -17,8 +41,10 @@ class defaultPipelineTest extends PipelineSpockTestBase {
         script.call([:])
 
         then:
+        1 * mavenMock.call('clean verify')
+        1 * artifactMock.publish()
+        1 * notificationMock.sendEmail(_)
         assertJobStatusSuccess()
-
     }
 }
 
