@@ -52,6 +52,19 @@ class defaultPipelineTest extends PipelineSpockTestBase {
         2 * utilsMock.parseJsonString(_)
         assertJobStatusSuccess()
     }
+
+    void 'Rainy day'() {
+        when:
+        script.call([:])
+
+        then:
+        1 * mavenMock.call(_) >> {
+            binding.getVariable('currentBuild').result = 'FAILURE'
+            }
+        0 * artifactMock.publish()
+        1 * notificationMock.sendEmail(_)
+        assertJobStatusFailure()
+    }
 }
 
 /*
