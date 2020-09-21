@@ -13,6 +13,10 @@ String repo = 'sheehan/gradle-example'
 //     }
 // }
 
+folder('example1') {
+    description 'Created by jenkins-gradle'
+}
+
 job("$basePath/gradle-example-deploy") {
     parameters {
         stringParam 'host'
