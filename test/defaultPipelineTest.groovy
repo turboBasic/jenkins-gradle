@@ -42,11 +42,16 @@ class defaultPipelineTest extends PipelineSpockTestBase {
     }
 
     void 'Happy flow'() {
+        given:
+        def junitMock = Mock(Closure)
+        helper.registerAllowedMethod('junit', [HashMap.class], junitMock)
+
         when:
         script.call([:])
 
         then:
         1 * mavenMock.call('clean verify')
+        1 * junitMock.call(_)
         1 * artifactMock.publish()
         1 * notificationMock.sendEmail(_)
         2 * utilsMock.parseJsonString(_)
@@ -54,17 +59,60 @@ class defaultPipelineTest extends PipelineSpockTestBase {
     }
 
     void 'Rainy day'() {
+        given:
+        def junitMock = Mock(Closure)
+        helper.registerAllowedMethod('junit', [HashMap.class], junitMock)
+
+        and:
+        binding.getVariable('currentBuild').previousBuild.result = 'FAILED'
+
         when:
         script.call([:])
 
         then:
         1 * mavenMock.call(_) >> {
             binding.getVariable('currentBuild').result = 'FAILURE'
-            }
+        }
+        1 * junitMock.call(_)
         0 * artifactMock.publish()
-        1 * notificationMock.sendEmail(_)
+        2 * notificationMock.sendEmail(_)
         assertJobStatusFailure()
     }
+
+    void 'A maven failure should still interpret the junit test report'() {
+        given:
+        def junitMock = Mock(Closure)
+        helper.registerAllowedMethod('junit', [HashMap.class], junitMock)
+
+        when:
+        script.call([:])
+
+        then:
+        1 * mavenMock.call('clean verify') >> {
+            binding.getVariable('currentBuild').result = 'FAILURE'
+        }
+        1 * junitMock.call(_)
+        assertJobStatusFailure()
+    }
+
+    void 'Send notification when status of maven call changes'() {
+        given:
+        def junitMock = Mock(Closure)
+        helper.registerAllowedMethod('junit', [HashMap.class], junitMock)
+
+        and:
+        binding.getVariable('currentBuild').previousBuild.result = 'FAILED'
+
+        when:
+        script.call([:])
+
+        then:
+        1 * mavenMock.call('clean verify')
+        1 * junitMock.call(_)
+        2 * notificationMock.sendEmail(_)
+        assertJobStatusSuccess()
+    }
+
 }
 
 /*

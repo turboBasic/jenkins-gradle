@@ -14,6 +14,9 @@ def call(Map pipelineParams) {
                     always {
                         junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: false
                     }
+                    changed {
+                        moduleNotification.sendEmail(currentBuild.result)
+                    }
                 }
             }
             stage('Publish to Nexus') {
