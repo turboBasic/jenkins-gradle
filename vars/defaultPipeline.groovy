@@ -23,7 +23,10 @@ def call(Map pipelineParams) {
                 agent { label 'maven' }
                 when {
                     beforeAgent true
-                    branch 'master'
+                    anyOf {
+                        branch 'master'
+                        tag 'release-*'
+                    }
                 }
                 steps {
                     script {
