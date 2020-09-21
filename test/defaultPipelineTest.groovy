@@ -63,9 +63,6 @@ class defaultPipelineTest extends PipelineSpockTestBase {
         def junitMock = Mock(Closure)
         helper.registerAllowedMethod('junit', [HashMap.class], junitMock)
 
-        and:
-        binding.getVariable('currentBuild').previousBuild.result = 'FAILED'
-
         when:
         script.call([:])
 
