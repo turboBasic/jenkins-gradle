@@ -21,6 +21,10 @@ def call(Map pipelineParams) {
             }
             stage('Publish to Nexus') {
                 agent { label 'maven' }
+                when {
+                    beforeAgent true
+                    branch 'master'
+                }
                 steps {
                     script {
                         echo "This is where we publish to Nexus"

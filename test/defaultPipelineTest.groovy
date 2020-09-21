@@ -113,6 +113,19 @@ class defaultPipelineTest extends PipelineSpockTestBase {
         assertJobStatusSuccess()
     }
 
+    void 'When not on master, do not publish to Nexus'() {
+        given:
+        binding.setVariable('BRANCH_NAME', 'develop')
+
+        when:
+        script.call([:])
+
+        then:
+        1 * mavenMock.call('clean verify')
+        0 * artifactMock.publish()
+        assertJobStatusSuccess()
+    }
+
 }
 
 /*
