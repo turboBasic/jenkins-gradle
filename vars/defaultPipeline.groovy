@@ -36,6 +36,19 @@ def call(Map pipelineParams) {
                     }
                 }
             }
+            stage 'report', {
+                agent { label 'lightweight' }
+                when {
+                    not {
+                        branch 'feature/*'
+                    }
+                }
+                steps {
+                    script {
+                        moduleUtils.parseJsonString(/{ "result": "${env.BRANCH_NAME}" }/)
+                    }
+                }
+            }
         }
         post {
             always {

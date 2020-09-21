@@ -25,9 +25,16 @@ sourceSets {
 }
 
 dependencies {
-    implementation "org.codehaus.groovy:groovy-all:2.4.12"
     implementation platform("org.jenkins-ci.main:jenkins-bom:${jenkinsVersion}")
+    implementation 'org.codehaus.groovy:groovy-all'
 
+    ['org.kohsuke.stapler:stapler:1.258'].each {
+        annotationProcessor it
+        implementation it
+    }
+
+    testImplementation platform("io.jenkins.tools.bom:bom-2.204.x:11")
+    testImplementation "org.jenkins-ci.plugins:job-dsl:${jobDslVersion}"
     // Spock 1.3
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
     // allows mocking of classes (in addition to interfaces)
@@ -36,7 +43,7 @@ dependencies {
     testRuntimeOnly 'org.objenesis:objenesis:3.0.1'
 
     // JUnit 4 + Vintage Engine 5
-    testImplementation 'junit:junit'
+    testImplementation 'junit:junit:4.12'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.4.1'
 
     // And finally Jenkins Pipeline Unit testing framework
@@ -44,8 +51,10 @@ dependencies {
 }
 
 jobDsl {
+    println 'mao: jobDsl in build.gradle'
+
     sourceDir 'src/jobs'
-    resourceDir 'src/configs'
+    resourceDir 'resources/configs'
     version = "${jobDslVersion}"
     addRepositories = false
 }
@@ -66,9 +75,8 @@ test {
 
     The following files need to be copied into the project, at test/groovy/testSupport/:
 
-    PipelineSpockTestBase.groovy
-    PipelineTestHelper.groovy
-    WhenExitException.groovy
-
+        PipelineSpockTestBase.groovy
+        PipelineTestHelper.groovy
+        WhenExitException.groovy
 
  */

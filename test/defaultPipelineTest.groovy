@@ -136,6 +136,19 @@ class defaultPipelineTest extends PipelineSpockTestBase {
         assertJobStatusSuccess()
     }
 
+    void '07. When on feature branch, do not prepare report'() {
+        given:
+        binding.setVariable('BRANCH_NAME', 'feature/something-awesome')
+
+        when:
+        script.call([:])
+
+        then:
+        1 * mavenMock.call('clean verify')
+        0 * artifactMock.publish()
+        assertJobStatusSuccess()
+    }
+
 }
 
 /*
